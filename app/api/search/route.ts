@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
+    const searchParams = req.nextUrl.searchParams;
     const query = searchParams.get("q") ?? "";
     const category = searchParams.get("category");
     const maxPrice = searchParams.get("maxPrice")

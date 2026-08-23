@@ -14,7 +14,7 @@ function getCurrentSeason(): string {
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
+    const searchParams = req.nextUrl.searchParams;
     const currentItemNames = searchParams.get("items")?.split(",") ?? [];
 
     const currentSeason = getCurrentSeason();
