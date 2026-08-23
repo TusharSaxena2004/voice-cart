@@ -18,18 +18,18 @@
 
 <hr />
 
-## ✨ Features
+## Features
 
-- 🎙️ **Natural Voice Commands**: Uses the Web Speech API and Llama 3 to understand complex, multi-item commands (e.g., *"Add 2 apples, some bread, and a gallon of milk"*).
-- 🌍 **Multilingual**: Speak your list in English, Spanish, French, or Hindi—the AI translates and categorizes it automatically.
-- 🎨 **Dark-Mode Glassmorphism UI**: Beautiful, fully responsive interface built with Tailwind CSS and animated with Framer Motion.
-- 🧠 **Smart Parsing**: Automatically categorizes items into aisles (Produce, Dairy, Meat, etc.) and tracks quantities and units.
-- 🔍 **AI Search & Suggestions**: Recommends seasonal items, frequent purchases, and allows complex querying (e.g., *"Find organic apples under $5"*).
-- ⚡ **Optimistic Updates**: Snappy UI driven by React Query and Zustand state management.
+- **Natural Voice Commands**: Uses the Web Speech API and Llama 3 to understand complex, multi-item commands (e.g., *"Add 2 apples, some bread, and a gallon of milk"*).
+- **Multilingual**: Speak your list in English, Spanish, French, or Hindi—the AI translates and categorizes it automatically.
+- **Dark-Mode Glassmorphism UI**: Beautiful, fully responsive interface built with Tailwind CSS and animated with Framer Motion.
+- **Smart Parsing**: Automatically categorizes items into aisles (Produce, Dairy, Meat, etc.) and tracks quantities and units.
+- **AI Search & Suggestions**: Recommends seasonal items, frequent purchases, and allows complex querying (e.g., *"Find organic apples under $5"*).
+- **Optimistic Updates**: Snappy UI driven by React Query and Zustand state management.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 VoiceCart utilizes a modern serverless architecture, bridging browser-native speech recognition with high-speed LLM processing via Groq.
 
@@ -76,7 +76,7 @@ graph TD
 
 ---
 
-## 💻 Tech Stack
+## Tech Stack
 
 - **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
 - **Language**: TypeScript
@@ -89,7 +89,7 @@ graph TD
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the repository
 ```bash
@@ -126,7 +126,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🗣️ Example Voice Commands
+## Example Voice Commands
 
 Tap the microphone icon (works best in Chrome or Edge) and try saying:
 
@@ -139,7 +139,7 @@ Tap the microphone icon (works best in Chrome or Edge) and try saying:
 
 ---
 
-## 🧪 Running Tests
+## Running Tests
 
 The NLP parser can be tested offline against the LLM to verify edge cases, formatting, and JSON schemas:
 
@@ -149,5 +149,5 @@ npm run test:parser
 
 ---
 <div align="center">
-  <sub>Built with ❤️ by AI for seamless everyday shopping.</sub>
+  <sub>Built by AI for seamless everyday shopping.</sub>
 </div>
