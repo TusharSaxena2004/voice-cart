@@ -1,142 +1,153 @@
-# VoiceCart — AI Voice Shopping Assistant
+<div align="center">
+  <div style="background: rgba(139, 92, 246, 0.1); padding: 20px; border-radius: 50%; display: inline-block; margin-bottom: 20px;">
+    <img src="https://api.iconify.design/lucide/shopping-cart.svg?color=%238b5cf6&width=64" alt="VoiceCart Logo" />
+  </div>
+  
+  # VoiceCart — AI Shopping Assistant
 
-> A fast, minimalist, voice-enabled grocery list manager with AI-driven natural language parsing, smart product suggestions, and real-time visual feedback.
+  **A modern, voice-powered grocery list manager built with Next.js, Groq, and Tailwind CSS.**
+  <br />
+  Say what you need, and AI organizes it for you.
 
-![VoiceCart Screenshot](./public/screenshot.png)
+  [![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+  [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)](https://www.prisma.io/)
+  [![Groq](https://img.shields.io/badge/AI-Groq_Llama_3-f59e0b)](https://groq.com/)
+</div>
 
----
+<hr />
 
 ## ✨ Features
 
-- 🎙️ **Voice Commands** — Add, remove, search, and clear items by speaking naturally
-- 🤖 **AI Parsing** — Groq LLM (llama-3.3-70b) extracts structured grocery data from any phrasing
-- 🌍 **Multilingual** — English, Spanish, French, Hindi, and more
-- 📦 **Smart Categorization** — Items auto-grouped by aisle (Produce, Dairy, Bakery, etc.)
-- 💡 **Suggestions** — History-based, seasonal, and substitute product suggestions
-- 🔍 **Voice Search** — Find products with constraints ("organic apples under $5")
-- ⚡ **Optimistic UI** — Instant updates with server-sync and rollback
-- 📱 **Mobile-first** — Works beautifully on all screen sizes
+- 🎙️ **Natural Voice Commands**: Uses the Web Speech API and Llama 3 to understand complex, multi-item commands (e.g., *"Add 2 apples, some bread, and a gallon of milk"*).
+- 🌍 **Multilingual**: Speak your list in English, Spanish, French, or Hindi—the AI translates and categorizes it automatically.
+- 🎨 **Dark-Mode Glassmorphism UI**: Beautiful, fully responsive interface built with Tailwind CSS and animated with Framer Motion.
+- 🧠 **Smart Parsing**: Automatically categorizes items into aisles (Produce, Dairy, Meat, etc.) and tracks quantities and units.
+- 🔍 **AI Search & Suggestions**: Recommends seasonal items, frequent purchases, and allows complex querying (e.g., *"Find organic apples under $5"*).
+- ⚡ **Optimistic Updates**: Snappy UI driven by React Query and Zustand state management.
 
 ---
 
-## 🛠 Local Setup
+## 🏗️ Architecture
 
-### Prerequisites
+VoiceCart utilizes a modern serverless architecture, bridging browser-native speech recognition with high-speed LLM processing via Groq.
 
-- Node.js 18+
-- A [Groq API key](https://console.groq.com) (free) **or** OpenAI API key
+```mermaid
+graph TD
+    %% Define Styles
+    classDef client fill:#1e1e2f,stroke:#6366f1,stroke-width:2px,color:#fff
+    classDef server fill:#1e1e2f,stroke:#10b981,stroke-width:2px,color:#fff
+    classDef external fill:#1e1e2f,stroke:#f59e0b,stroke-width:2px,color:#fff
+    classDef db fill:#1e1e2f,stroke:#3b82f6,stroke-width:2px,color:#fff
 
-### Installation
+    subgraph Client [Frontend Application]
+        UI[React UI Components]:::client
+        Speech[Web Speech API]:::client
+        State[Zustand & React Query]:::client
+    end
 
+    subgraph Backend [Next.js Serverless Edge]
+        Parser[Voice Parser Route]:::server
+        Actions[Server Actions]:::server
+    end
+
+    subgraph AI [External Intelligence]
+        Groq[Groq API - Llama 3]:::external
+    end
+
+    subgraph Storage [Database Layer]
+        Prisma[Prisma ORM]:::db
+        SQLite[(SQLite Database)]:::db
+    end
+
+    %% Flow
+    UI -- 1. Taps Mic --> Speech
+    Speech -- 2. Transcribes Audio --> UI
+    UI -- 3. POST /api/parse-voice --> Parser
+    Parser -- 4. Strict Prompting --> Groq
+    Groq -- 5. JSON Commands --> Parser
+    Parser -- 6. Zod Validation --> Actions
+    Actions -- 7. Execute Mutations --> Prisma
+    Prisma <--> SQLite
+    Actions -- 8. Return Updated State --> State
+    State -- 9. Reactive Re-render --> UI
+```
+
+---
+
+## 💻 Tech Stack
+
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + custom Glassmorphism UI
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Database**: [SQLite](https://sqlite.org/) (Dev) / [Prisma ORM](https://www.prisma.io/)
+- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) + [TanStack React Query](https://tanstack.com/query/latest)
+- **AI / LLM**: [Groq](https://groq.com/) (Llama 3 70B via Groq SDK)
+- **Validation**: [Zod](https://zod.dev/)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
 ```bash
-# 1. Clone / enter project
-cd voice_command
+git clone https://github.com/TusharSaxena2004/voice-cart.git
+cd voice-cart
+```
 
-# 2. Install dependencies
+### 2. Install dependencies
+```bash
 npm install
+```
 
-# 3. Configure environment
-cp .env.local.example .env.local
-# Edit .env.local and add your GROQ_API_KEY
+### 3. Environment Setup
+Create a `.env.local` file in the root directory and add your Groq API key:
+```env
+GROQ_API_KEY=gsk_your_groq_api_key_here
+DATABASE_URL="file:./dev.db"
+```
+*(Get a free, ultra-fast API key from [console.groq.com](https://console.groq.com))*
 
-# 4. Set up database
-npm run db:generate    # Generate Prisma client
-npm run db:migrate     # Create SQLite database
-npm run db:seed        # Seed with mock data
+### 4. Database Setup & Seeding
+Initialize the SQLite database and populate it with sample catalogue data:
+```bash
+npx prisma db push
+npx prisma generate
+npm run seed
+```
 
-# 5. Start development server
+### 5. Run the Development Server
+```bash
 npm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) 🎉
-
-### Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GROQ_API_KEY` | Yes* | Groq API key for LLM parsing |
-| `OPENAI_API_KEY` | Yes* | OpenAI fallback (if no Groq key) |
-| `DATABASE_URL` | Yes | SQLite: `file:./dev.db` |
-
-*At least one LLM API key is required.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🧪 Testing
+## 🗣️ Example Voice Commands
+
+Tap the microphone icon (works best in Chrome or Edge) and try saying:
+
+* **Basic Addition**: *"Add milk and two loaves of bread"*
+* **Complex Quantities**: *"I need a gallon of water, 500 grams of pasta, and 3 cans of soda"*
+* **Removal**: *"Remove the water"* or *"I don't need the pasta anymore"*
+* **Searching**: *"Find me some organic apples under 5 dollars"*
+* **Multilingual**: *"Agrega tres manzanas y jugo de naranja"*
+* **Clearing**: *"Clear my shopping list"*
+
+---
+
+## 🧪 Running Tests
+
+The NLP parser can be tested offline against the LLM to verify edge cases, formatting, and JSON schemas:
 
 ```bash
-# NLP parser tests (requires API key)
 npm run test:parser
-
-# Build check
-npm run build
-
-# Database UI
-npm run db:studio
 ```
 
 ---
-
-## 🏗 Architecture
-
-**VoiceCart** is built as a full-stack Next.js 14 application using the App Router. The architecture separates concerns into three clear layers:
-
-**Frontend layer** consists of React components with Zustand for client state and React Query for server synchronization. Voice input is captured via the native Web Speech API (zero cost, no third-party dependency), feeding live transcripts into the UI. Framer Motion provides layout animations and the audio HUD waveform.
-
-**AI/NLP layer** receives raw transcripts via a POST `/api/parse-voice` route and sends them to Groq's `llama-3.3-70b-versatile` model with a strict JSON schema system prompt. Zod validates the structured output before it reaches the UI, with graceful fallback for malformed responses. OpenAI `gpt-4o-mini` is available as a secondary fallback.
-
-**Data layer** uses Prisma ORM with SQLite (development) or PostgreSQL (production). Server Actions handle all mutations with optimistic updates that roll back on failure. The suggestions engine combines item purchase frequency, current season detection, and a curated substitution dictionary seeded into the database.
-
----
-
-## 📁 Project Structure
-
-```
-app/
-  api/
-    parse-voice/    ← LLM transcript parsing
-    suggestions/    ← Smart product suggestions
-    search/         ← Product catalogue search
-  layout.tsx        ← Root layout + providers
-  page.tsx          ← Main dashboard
-components/
-  VoiceController   ← Mic button + command dispatch
-  AudioHUD          ← Animated waveform / spinner
-  ShoppingList      ← Category-grouped item list
-  SuggestionsShelf  ← Horizontal suggestion carousel
-  SearchDrawer      ← Slide-up search overlay
-hooks/
-  useVoiceRecognition  ← Web Speech API wrapper
-  useShoppingList      ← React Query + server actions
-  useSuggestions       ← Suggestion fetcher
-lib/
-  llm.ts           ← Groq/OpenAI client + retry
-  parser.ts        ← Zod validation + category inference
-  actions.ts       ← Server actions (CRUD)
-  db.ts            ← Prisma singleton
-store/
-  shoppingStore    ← Zustand global state
-prisma/
-  schema.prisma    ← DB models
-  seed.ts          ← 30+ history + 35 catalogue items
-```
-
----
-
-## 🎤 Voice Command Examples
-
-| Say | Action |
-|-----|--------|
-| *"Add 2 cartons of almond milk"* | Adds 2 almond milks to Dairy |
-| *"Put some sourdough and eggs on my list"* | Adds Bakery + Dairy items |
-| *"Remove the water bottle"* | Removes water from list |
-| *"Find organic apples under $5"* | Opens search with filter |
-| *"Agrega dos litros de leche"* | Spanish: adds 2L milk |
-| *"Clear my list"* | Clears all items |
-| *"What do you suggest?"* | Shows suggestions panel |
-
----
-
-## 📄 License
-
-MIT
+<div align="center">
+  <sub>Built with ❤️ by AI for seamless everyday shopping.</sub>
+</div>
