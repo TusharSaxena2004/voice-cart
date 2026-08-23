@@ -14,8 +14,9 @@
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
   [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)](https://www.prisma.io/)
   [![Groq](https://img.shields.io/badge/AI-Groq_Llama_3-f59e0b)](https://groq.com/)
+  
+  🚀 **Live Demo:** [voice-cart-sigma.vercel.app](https://voice-cart-sigma.vercel.app/)
 </div>
-
 <hr />
 
 ## Features
