@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model ShoppingList {
+  id        String         @id @default(cuid())
+  name      String         @default("My Shopping List")
+  items     ShoppingItem[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model ShoppingItem {
+  id             String       @id @default(cuid())
+  name           String
+  quantity       Float        @default(1)
+  unit           String?
+  category       String       @default("Other")
+  brand          String?
+  maxPrice       Float?
+  estimatedPrice Float?
+  checked        Boolean      @default(false)
+  list           ShoppingList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId         String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([listId])
+  @@index([category])
+  @@index([name])
+}
+
+model ItemHistory {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  category  String   @default("Other")
+  count     Int      @default(1)
+  lastUsed  DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@index([count])
+}
+
+model Catalogue {
+  id             String   @id @default(cuid())
+  name           String
+  category       String   @default("Other")
+  season         String?
+  estimatedPrice Float?
+  isSubstituteFor String?
+  tags           String   @default("[]") // JSON array stored as string
+  inStock        Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  @@index([category])
+  @@index([season])
+  @@index([isSubstituteFor])
+}
