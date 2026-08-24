@@ -36,6 +36,11 @@ export function useVoiceRecognition(
 
   const isListening = voiceState === "listening";
 
+  const onFinalTranscriptRef = useRef(onFinalTranscript);
+  useEffect(() => {
+    onFinalTranscriptRef.current = onFinalTranscript;
+  }, [onFinalTranscript]);
+
   // Check browser support
   useEffect(() => {
     const SpeechRecognitionAPI =
@@ -81,7 +86,7 @@ export function useVoiceRecognition(
       if (final) {
         setTranscript(final);
         setInterimTranscript("");
-        onFinalTranscript(final);
+        onFinalTranscriptRef.current(final);
       }
     };
 
