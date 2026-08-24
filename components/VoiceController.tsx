@@ -11,9 +11,9 @@ import { TranscriptBadge } from "./TranscriptBadge";
 import { ParsedCommand } from "@/types";
 
 export function VoiceController() {
-  const { voiceState, setVoiceState, addToast, setSearchOpen, setSearchResults, setSearchQuery } =
+  const { voiceState, setVoiceState, addToast, setSearchOpen, setSearchResults, setSearchQuery, items } =
     useShoppingStore();
-  const { addItem, clearList } = useShoppingList();
+  const { addItem, clearList, removeItem } = useShoppingList();
 
   const handleFinalTranscript = useCallback(
     async (transcript: string) => {
@@ -44,7 +44,22 @@ export function VoiceController() {
             break;
 
           case "REMOVE":
-            addToast({ type: "info", message: `Removing: ${data.items.map((i) => i.name).join(", ")}` });
+            let removedCount = 0;
+            for (const itemToRemove of data.items) {
+              const existing = items.find(
+                (i) => i.name.toLowerCase().includes(itemToRemove.name.toLowerCase()) || 
+                       itemToRemove.name.toLowerCase().includes(i.name.toLowerCase())
+              );
+              if (existing) {
+                removeItem(existing.id, existing.name);
+                removedCount++;
+              }
+            }
+            if (removedCount > 0) {
+              // The mutation itself will trigger a success toast via useShoppingList, but we can also log or just rely on it.
+            } else {
+              addToast({ type: "warning", message: `Couldn't find those items to remove.` });
+            }
             break;
 
           case "SEARCH":
@@ -77,7 +92,7 @@ export function VoiceController() {
         setVoiceState("idle");
       }
     },
-    [addItem, clearList, setVoiceState, addToast, setSearchOpen, setSearchResults, setSearchQuery]
+    [addItem, removeItem, clearList, setVoiceState, addToast, setSearchOpen, setSearchResults, setSearchQuery, items]
   );
 
   const { start, stop, isListening, isSupported } = useVoiceRecognition(handleFinalTranscript);
