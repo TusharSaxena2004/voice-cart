@@ -23,7 +23,7 @@
 
 - **Natural Voice Commands**: Uses the Web Speech API and Llama 3 to understand complex, multi-item commands (e.g., *"Add 2 apples, some bread, and a gallon of milk"*).
 - **Multilingual**: Speak your list in English, Spanish, French, or Hindi—the AI translates and categorizes it automatically.
-- **Dark-Mode Glassmorphism UI**: Beautiful, fully responsive interface built with Tailwind CSS and animated with Framer Motion.
+- **Modern Flat Dark-Mode UI**: Beautiful, fully responsive flat interface inspired by modern dashboards, built with Tailwind CSS and animated with Framer Motion.
 - **Smart Parsing**: Automatically categorizes items into aisles (Produce, Dairy, Meat, etc.) and tracks quantities and units.
 - **AI Search & Suggestions**: Recommends seasonal items, frequent purchases, and allows complex querying (e.g., *"Find organic apples under $5"*).
 - **Optimistic Updates**: Snappy UI driven by React Query and Zustand state management.
@@ -59,7 +59,7 @@ graph TD
 
     subgraph Storage [Database Layer]
         Prisma[Prisma ORM]:::db
-        SQLite[(SQLite Database)]:::db
+        PostgreSQL[(PostgreSQL Database)]:::db
     end
 
     %% Flow
@@ -70,7 +70,7 @@ graph TD
     Groq -- 5. JSON Commands --> Parser
     Parser -- 6. Zod Validation --> Actions
     Actions -- 7. Execute Mutations --> Prisma
-    Prisma <--> SQLite
+    Prisma <--> PostgreSQL
     Actions -- 8. Return Updated State --> State
     State -- 9. Reactive Re-render --> UI
 ```
@@ -81,9 +81,9 @@ graph TD
 
 - **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
 - **Language**: TypeScript
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + custom Glassmorphism UI
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + Modern Flat Design
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Database**: [SQLite](https://sqlite.org/) (Dev) / [Prisma ORM](https://www.prisma.io/)
+- **Database**: [PostgreSQL](https://postgresql.org/) (Neon / Vercel) + [Prisma ORM](https://www.prisma.io/)
 - **State Management**: [Zustand](https://zustand-demo.pmnd.rs/) + [TanStack React Query](https://tanstack.com/query/latest)
 - **AI / LLM**: [Groq](https://groq.com/) (Llama 3 70B via Groq SDK)
 - **Validation**: [Zod](https://zod.dev/)
@@ -104,19 +104,18 @@ npm install
 ```
 
 ### 3. Environment Setup
-Create a `.env.local` file in the root directory and add your Groq API key:
+Create a `.env.local` file in the root directory and add your Groq API key along with your PostgreSQL URL:
 ```env
 GROQ_API_KEY=gsk_your_groq_api_key_here
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://user:password@hostname:5432/dbname"
 ```
 *(Get a free, ultra-fast API key from [console.groq.com](https://console.groq.com))*
 
 ### 4. Database Setup & Seeding
-Initialize the SQLite database and populate it with sample catalogue data:
+Push the Prisma schema to your PostgreSQL database and populate it with sample catalogue data:
 ```bash
 npx prisma db push
-npx prisma generate
-npm run seed
+npm run db:seed
 ```
 
 ### 5. Run the Development Server
