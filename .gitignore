@@ -11,7 +11,7 @@ out/
 build/
 
 # Database
-# *.db (commented out to allow pushing sqlite db to vercel for demo)
+*.db
 *.db-shm
 *.db-wal
 prisma/migrations/
