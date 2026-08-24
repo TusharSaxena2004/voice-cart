@@ -31,11 +31,15 @@ Rules:
 - Infer category from context (milk → Dairy, bread → Bakery, etc.)
 - Infer quantity from number words (one → 1, a → 1, couple → 2, dozen → 12, half → 0.5)
 - If multiple items mentioned, return all in the items array
+- For weight/volume measurements (e.g. 250 grams, 1 kg, 500 ml), append the measurement to the item name (e.g., "Paneer 250g") and set the quantity to 1, unless multiple packets are explicitly asked for (e.g. "two 250g packs").
 - If input is completely unparseable, return: {"action":"ADD","items":[],"raw_transcript":"...","language":"en"}
 
 Examples:
 Input: "Add 2 cartons of almond milk and some sourdough bread"
 Output: {"action":"ADD","items":[{"name":"Almond Milk","quantity":2,"unit":"cartons","category":"Dairy","brand":null,"max_price":null},{"name":"Sourdough Bread","quantity":1,"unit":null,"category":"Bakery","brand":null,"max_price":null}],"raw_transcript":"Add 2 cartons of almond milk and some sourdough bread","language":"en"}
+
+Input: "Add 250 grams of paneer"
+Output: {"action":"ADD","items":[{"name":"Paneer 250g","quantity":1,"unit":"pack","category":"Dairy","brand":null,"max_price":null}],"raw_transcript":"Add 250 grams of paneer","language":"en"}
 
 Input: "Agrega dos litros de leche a la lista"
 Output: {"action":"ADD","items":[{"name":"Milk","quantity":2,"unit":"liters","category":"Dairy","brand":null,"max_price":null}],"raw_transcript":"Agrega dos litros de leche a la lista","language":"es"}
